@@ -14,23 +14,23 @@ pipeline {
 
         stage('Build Java Application') {
             steps {
-                bat 'mvn clean package -DskipTests'
+                bat 'mvn -B clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t daksha16/dockerapp:latest .'
+                bat "docker build -t %DOCKER_IMAGE% ."
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    bat '''
-                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
-                        docker push sakshishelake/dockerapp:latest
-                    '''
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    bat """
+                        echo %DOCKER_PASS% | docker login --username %DOCKER_USER% --password-stdin
+                        docker push %DOCKER_IMAGE%
+                    """
                 }
             }
         }
