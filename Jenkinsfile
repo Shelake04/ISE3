@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3'
+    }
+
     environment {
         DOCKER_IMAGE = "sakshishelake/dockerapp:latest"
     }
@@ -38,7 +42,7 @@ pipeline {
 
     post {
         success {
-            echo "✅ Docker image built and pushed successfully to Docker Hub!"
+            echo "✅ Docker image built and pushed successfully!"
         }
         failure {
             echo "❌ Build or push failed!"
