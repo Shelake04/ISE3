@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = "daksha16/dockerapp:latest"
+        DOCKER_IMAGE = "sakshishelake/dockerapp:latest"
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/Daksha-16/dockerapp.git'
+                git branch: 'main', url: 'https://github.com/Shelake04/ISE3'
             }
         }
 
@@ -29,7 +29,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'tomcat-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     bat '''
                         docker login -u %DOCKER_USER% -p %DOCKER_PASS%
-                        docker push daksha16/dockerapp:latest
+                        docker push sakshishelake/dockerapp:latest
                     '''
                 }
             }
